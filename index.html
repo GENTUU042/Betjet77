@@ -1,0 +1,2406 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JET777 | Premium Social Gaming Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Rajdhani', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        jet: {
+                            dark: '#020202',
+                            darker: '#0a0a0f',
+                            card: '#12121a',
+                            gold: '#ffd700',
+                            goldLight: '#ffed4e',
+                            goldDark: '#b8860b',
+                            accent: '#ff3333',
+                            accentHover: '#cc0000',
+                            surface: '#1a1a24',
+                            surfaceLight: '#252532'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'shine': 'shine 3s linear infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'bounce-slight': 'bounce-slight 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shine: {
+                            '0%': { backgroundPosition: '200% center' },
+                            '100%': { backgroundPosition: '-200% center' },
+                        },
+                        'bounce-slight': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffd700;
+        }
+
+        .glass-panel {
+            background: rgba(18, 18, 26, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(26, 26, 36, 0.95), rgba(18, 18, 26, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:active {
+            transform: scale(0.98);
+        }
+
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 200% auto;
+            animation: shine 3s linear infinite;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+            color: #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-gold:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .btn-outline {
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            color: #ffd700;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:active {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateY(2px);
+        }
+
+        .game-card {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
+            transition: left 0.6s;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .game-card:active::before {
+            left: 100%;
+        }
+
+        .game-card .play-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-card:active .play-overlay {
+            opacity: 1;
+        }
+
+        .slot-machine {
+            background: linear-gradient(180deg, #1a1a24 0%, #12121a 100%);
+            border: 3px solid #ffd700;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slot-reel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            height: 100%;
+            background: #0a0a0f;
+            border-right: 2px solid #ffd700;
+        }
+
+        .slot-reel:last-child {
+            border-right: none;
+        }
+
+        .spinning {
+            animation: slotSpin 0.1s linear infinite;
+        }
+
+        @keyframes slotSpin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+
+        .coin {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.5);
+            animation: coinFall 1s ease-out forwards;
+        }
+
+        @keyframes coinFall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: #ffd700;
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:active::after,
+        .nav-item.active::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform-origin: 50% 50%;
+        }
+
+        .floating-coins {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .toast {
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .jackpot-counter {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .game-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .game-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Game Specific Styles */
+        .blackjack-table {
+            background: radial-gradient(ellipse at center, #35654d 0%, #1a3d2e 100%);
+            border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .roulette-wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #d00 0deg 9.73deg,
+                #000 9.73deg 19.46deg,
+                #d00 19.46deg 29.19deg,
+                #000 29.19deg 38.92deg,
+                #d00 38.92deg 48.65deg,
+                #000 48.65deg 58.38deg,
+                #d00 58.38deg 68.11deg,
+                #000 68.11deg 77.84deg,
+                #d00 77.84deg 87.57deg,
+                #000 87.57deg 97.3deg,
+                #d00 97.3deg 107.03deg,
+                #000 107.03deg 116.76deg,
+                #d00 116.76deg 126.49deg,
+                #000 126.49deg 136.22deg,
+                #d00 136.22deg 145.95deg,
+                #000 145.95deg 155.68deg,
+                #d00 155.68deg 165.41deg,
+                #000 165.41deg 175.14deg,
+                #d00 175.14deg 184.87deg,
+                #000 184.87deg 194.6deg,
+                #d00 194.6deg 204.33deg,
+                #000 204.33deg 214.06deg,
+                #d00 214.06deg 223.79deg,
+                #000 223.79deg 233.52deg,
+                #d00 233.52deg 243.25deg,
+                #000 243.25deg 252.98deg,
+                #d00 252.98deg 262.71deg,
+                #000 262.71deg 272.44deg,
+                #d00 272.44deg 282.17deg,
+                #000 282.17deg 291.9deg,
+                #d00 291.9deg 301.63deg,
+                #000 301.63deg 311.36deg,
+                #d00 311.36deg 321.09deg,
+                #000 321.09deg 330.82deg,
+                #d00 330.82deg 340.55deg,
+                #000 340.55deg 350.28deg,
+                #d00 350.28deg 360deg
+            );
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .roulette-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #ffd700 0%, #b8860b 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .card {
+            width: 80px;
+            height: 112px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .card.red {
+            color: #d00;
+        }
+
+        .card.black {
+            color: #000;
+        }
+
+        .poker-card {
+            width: 60px;
+            height: 84px;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            margin: 0 -10px;
+            transition: transform 0.3s ease;
+        }
+
+        .poker-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .dice {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            padding: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .dice-dot {
+            background: #000;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            margin: auto;
+        }
+
+        .slot-symbol {
+            font-size: 4rem;
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .game-preview {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-preview::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,215,0,0.1) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-preview:hover::after {
+            opacity: 1;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body class="bg-jet-dark text-white font-sans overflow-x-hidden selection:bg-jet-gold selection:text-black">
+
+    <!-- Floating Coins Background -->
+    <div id="floating-coins" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+    <!-- Header -->
+    <header id="header" class="fixed w-full top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2 group" onclick="goHome()">
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-jet-gold to-yellow-600 flex items-center justify-center shadow-lg group-active:scale-95 transition-transform">
+                        <i class="fas fa-jet-fighter-up text-black text-lg md:text-xl"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-display text-xl md:text-2xl font-black tracking-wider leading-none">JET<span class="text-jet-gold">777</span></span>
+                        <span class="text-[10px] text-gray-400 tracking-widest uppercase">Gaming</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden lg:flex items-center gap-8">
+                    <a href="#games" class="nav-item text-sm font-bold uppercase tracking-wider text-gray-300 hover:text-white transition-colors" onclick="showSection('games')">Games</a>
+                    <a href="#promotions" class="nav-item text-sm font-bold uppercase tracking-wider text-gray-300 hover:text-white transition-colors" onclick="showSection('promotions')">Promos</a>
+                    <a href="#leaderboard" class="nav-item text-sm font-bold uppercase tracking-wider text-gray-300 hover:text-white transition-colors" onclick="showSection('leaderboard')">Rankings</a>
+                    <a href="#vip" class="nav-item text-sm font-bold uppercase tracking-wider text-gray-300 hover:text-white transition-colors" onclick="showSection('vip')">VIP</a>
+                </nav>
+
+                <!-- Right Side -->
+                <div class="flex items-center gap-3">
+                    <!-- Balance (shown when logged in) -->
+                    <div id="user-balance" class="hidden md:flex items-center gap-2 bg-jet-card px-4 py-2 rounded-full border border-jet-gold/30">
+                        <i class="fas fa-coins text-jet-gold"></i>
+                        <span id="balance-amount" class="font-display font-bold text-jet-gold">0</span>
+                    </div>
+
+                    <!-- Auth Buttons -->
+                    <div id="auth-buttons" class="flex items-center gap-2">
+                        <button onclick="openLogin()" class="hidden md:block px-4 py-2 text-sm font-bold text-gray-300 hover:text-white transition-colors">LOG IN</button>
+                        <button onclick="openRegister()" class="btn-gold px-4 md:px-6 py-2 rounded-full text-sm font-bold">JOIN NOW</button>
+                    </div>
+
+                    <!-- User Menu (hidden by default) -->
+                    <div id="user-menu" class="hidden items-center gap-3">
+                        <button onclick="openProfile()" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                            <img id="user-avatar" src="" class="w-10 h-10 rounded-full border-2 border-jet-gold">
+                            <span id="user-name" class="hidden md:block font-bold text-sm"></span>
+                        </button>
+                    </div>
+
+                    <!-- Mobile Menu Toggle -->
+                    <button onclick="toggleMobileMenu()" class="lg:hidden w-10 h-10 flex items-center justify-center text-2xl">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu fixed inset-0 z-40 bg-jet-darker lg:hidden">
+        <div class="flex flex-col h-full p-6">
+            <div class="flex justify-between items-center mb-8">
+                <span class="font-display text-2xl font-bold">MENU</span>
+                <button onclick="toggleMobileMenu()" class="w-10 h-10 flex items-center justify-center text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <nav class="flex flex-col gap-4 flex-1">
+                <a onclick="showSection('games'); toggleMobileMenu()" class="flex items-center gap-4 p-4 rounded-xl bg-jet-card active:bg-jet-surface transition-colors">
+                    <i class="fas fa-gamepad text-jet-gold text-xl"></i>
+                    <span class="font-bold text-lg">Games</span>
+                </a>
+                <a onclick="showSection('promotions'); toggleMobileMenu()" class="flex items-center gap-4 p-4 rounded-xl bg-jet-card active:bg-jet-surface transition-colors">
+                    <i class="fas fa-gift text-jet-gold text-xl"></i>
+                    <span class="font-bold text-lg">Promotions</span>
+                </a>
+                <a onclick="showSection('leaderboard'); toggleMobileMenu()" class="flex items-center gap-4 p-4 rounded-xl bg-jet-card active:bg-jet-surface transition-colors">
+                    <i class="fas fa-trophy text-jet-gold text-xl"></i>
+                    <span class="font-bold text-lg">Leaderboard</span>
+                </a>
+                <a onclick="showSection('vip'); toggleMobileMenu()" class="flex items-center gap-4 p-4 rounded-xl bg-jet-card active:bg-jet-surface transition-colors">
+                    <i class="fas fa-crown text-jet-gold text-xl"></i>
+                    <span class="font-bold text-lg">VIP Club</span>
+                </a>
+            </nav>
+
+            <div id="mobile-auth" class="mt-auto">
+                <button onclick="openRegister(); toggleMobileMenu()" class="btn-gold w-full py-4 rounded-xl text-lg font-bold mb-3">CREATE ACCOUNT</button>
+                <button onclick="openLogin(); toggleMobileMenu()" class="w-full py-4 rounded-xl border-2 border-jet-gold text-jet-gold font-bold text-lg">LOG IN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="pt-16 md:pt-20">
+        
+        <!-- Hero Section -->
+        <section id="hero" class="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-jet-dark via-transparent to-jet-dark z-10"></div>
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-20"></div>
+            
+            <!-- Animated Background Elements -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-jet-gold/10 rounded-full blur-3xl animate-pulse-slow"></div>
+                <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-jet-accent/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
+            </div>
+
+            <div class="container mx-auto px-4 relative z-20 text-center">
+                <!-- Jackpot Display -->
+                <div class="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-jet-card/80 border border-jet-gold/30 backdrop-blur-sm">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-wider">Progressive Jackpot</span>
+                    <span id="jackpot-amount" class="jackpot-counter font-display text-lg md:text-xl font-bold text-jet-gold">$2,456,789.00</span>
+                </div>
+
+                <h1 class="hero-title font-display text-4xl md:text-6xl lg:text-8xl font-black mb-4 leading-tight">
+                    <span class="block text-white">WIN BIG</span>
+                    <span class="block text-gradient-gold mt-2">PLAY BIGGER</span>
+                </h1>
+
+                <p class="text-gray-400 text-base md:text-lg max-w-xl mx-auto mb-8 px-4">
+                    Experience the ultimate social gaming platform. 
+                    <span class="text-jet-gold font-bold">200+ games</span>, daily rewards, and massive jackpots await.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center px-4">
+                    <button onclick="startPlaying()" class="btn-gold px-8 py-4 rounded-full text-lg font-bold w-full sm:w-auto flex items-center justify-center gap-2">
+                        <i class="fas fa-play"></i> PLAY NOW
+                    </button>
+                    <button onclick="showSection('games')" class="btn-outline px-8 py-4 rounded-full text-lg font-bold w-full sm:w-auto">
+                        EXPLORE GAMES
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-3 gap-4 max-w-lg mx-auto mt-12 px-4">
+                    <div class="text-center p-4 rounded-xl bg-jet-card/50 border border-white/5">
+                        <div class="font-display text-2xl md:text-3xl font-bold text-jet-gold">200+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider">Games</div>
+                    </div>
+                    <div class="text-center p-4 rounded-xl bg-jet-card/50 border border-white/5">
+                        <div class="font-display text-2xl md:text-3xl font-bold text-jet-gold">1M+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider">Players</div>
+                    </div>
+                    <div class="text-center p-4 rounded-xl bg-jet-card/50 border border-white/5">
+                        <div class="font-display text-2xl md:text-3xl font-bold text-jet-gold">24/7</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider">Support</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slight">
+                <i class="fas fa-chevron-down text-jet-gold text-2xl opacity-50"></i>
+            </div>
+        </section>
+
+        <!-- Featured Games -->
+        <section id="games" class="py-16 md:py-24 px-4">
+            <div class="container mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <div>
+                        <h2 class="font-display text-3xl md:text-4xl font-bold mb-2">FEATURED <span class="text-jet-gold">GAMES</span></h2>
+                        <p class="text-gray-400 text-sm md:text-base">Handpicked favorites for maximum excitement</p>
+                    </div>
+                    
+                    <!-- Category Filter -->
+                    <div class="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto scrollbar-hide">
+                        <button onclick="filterCategory('all')" class="category-btn active px-4 py-2 rounded-full text-sm font-bold bg-jet-gold text-black whitespace-nowrap" data-cat="all">All</button>
+                        <button onclick="filterCategory('slots')" class="category-btn px-4 py-2 rounded-full text-sm font-bold bg-jet-card text-gray-400 border border-white/10 whitespace-nowrap" data-cat="slots">Slots</button>
+                        <button onclick="filterCategory('table')" class="category-btn px-4 py-2 rounded-full text-sm font-bold bg-jet-card text-gray-400 border border-white/10 whitespace-nowrap" data-cat="table">Table</button>
+                        <button onclick="filterCategory('live')" class="category-btn px-4 py-2 rounded-full text-sm font-bold bg-jet-card text-gray-400 border border-white/10 whitespace-nowrap" data-cat="live">Live</button>
+                    </div>
+                </div>
+
+                <!-- Games Grid -->
+                <div id="games-container" class="game-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                    <!-- Game cards injected by JS -->
+                </div>
+
+                <div class="text-center mt-8">
+                    <button onclick="loadMoreGames()" class="px-8 py-3 rounded-full border-2 border-jet-gold text-jet-gold font-bold hover:bg-jet-gold hover:text-black transition-all active:scale-95">
+                        LOAD MORE GAMES
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Jackpot Section -->
+        <section class="py-16 bg-gradient-to-r from-jet-card to-jet-darker relative overflow-hidden">
+            <div class="absolute inset-0 shimmer"></div>
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+                    <div class="text-center lg:text-left">
+                        <span class="inline-block px-3 py-1 rounded-full bg-jet-accent/20 text-jet-accent text-xs font-bold mb-3">LIVE NOW</span>
+                        <h2 class="font-display text-3xl md:text-5xl font-bold mb-2">MEGA JACKPOT</h2>
+                        <p class="text-gray-400 mb-6">Spin now for a chance to win life-changing prizes!</p>
+                        <button onclick="playJackpot()" class="btn-gold px-8 py-4 rounded-full font-bold text-lg">
+                            SPIN FOR $5M+
+                        </button>
+                    </div>
+                    
+                    <!-- Mini Slot Machine -->
+                    <div class="slot-machine w-full max-w-md aspect-[3/1] flex">
+                        <div class="slot-reel flex-1" id="reel1">7️⃣</div>
+                        <div class="slot-reel flex-1" id="reel2">7️⃣</div>
+                        <div class="slot-reel flex-1" id="reel3">7️⃣</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Promotions -->
+        <section id="promotions" class="py-16 md:py-24 px-4">
+            <div class="container mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">EXCLUSIVE <span class="text-jet-gold">OFFERS</span></h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">Boost your gameplay with our generous bonuses and promotions</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Welcome Bonus -->
+                    <div class="glass-card rounded-2xl p-6 md:p-8 border-t-4 border-jet-gold relative overflow-hidden group" onclick="claimOffer('welcome')">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-jet-gold/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                        <div class="relative z-10">
+                            <div class="w-14 h-14 rounded-full bg-jet-gold/20 flex items-center justify-center text-jet-gold text-2xl mb-4">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold mb-2">Welcome Package</h3>
+                            <div class="text-4xl font-display font-bold text-jet-gold mb-4">100%<span class="text-lg text-white ml-2">up to $500</span></div>
+                            <ul class="space-y-2 mb-6 text-sm text-gray-300">
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-400"></i> +100 Free Spins</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-400"></i> 10 Days of Rewards</li>
+                            </ul>
+                            <button class="w-full py-3 rounded-lg bg-jet-gold text-black font-bold hover:bg-white transition-colors">CLAIM NOW</button>
+                        </div>
+                    </div>
+
+                    <!-- Daily Bonus -->
+                    <div class="glass-card rounded-2xl p-6 md:p-8 border-t-4 border-blue-500 relative overflow-hidden group" onclick="claimOffer('daily')">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                        <div class="relative z-10">
+                            <div class="w-14 h-14 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 text-2xl mb-4">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold mb-2">Daily Cashback</h3>
+                            <div class="text-4xl font-display font-bold text-blue-400 mb-4">25%<span class="text-lg text-white ml-2">Cashback</span></div>
+                            <ul class="space-y-2 mb-6 text-sm text-gray-300">
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-400"></i> No Wagering Required</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-400"></i> Automatic Credit</li>
+                            </ul>
+                            <button class="w-full py-3 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-600 transition-colors">OPT IN</button>
+                        </div>
+                    </div>
+
+                    <!-- VIP -->
+                    <div class="glass-card rounded-2xl p-6 md:p-8 border-t-4 border-purple-500 relative overflow-hidden group" onclick="claimOffer('vip')">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                        <div class="relative z-10">
+                            <div class="w-14 h-14 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-500 text-2xl mb-4">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3 class="font-display text-2xl font-bold mb-2">VIP Rewards</h3>
+                            <div class="text-4xl font-display font-bold text-purple-400 mb-4">LUXURY<span class="text-lg text-white ml-2">Perks</span></div>
+                            <ul class="space-y-2 mb-6 text-sm text-gray-300">
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-400"></i> Personal Manager</li>
+                                <li class="flex items-center gap-2"><i class="fas fa-check text-green-400"></i> Exclusive Events</li>
+                            </ul>
+                            <button class="w-full py-3 rounded-lg bg-purple-500 text-white font-bold hover:bg-purple-600 transition-colors">JOIN VIP</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard -->
+        <section id="leaderboard" class="py-16 md:py-24 px-4 bg-jet-card/30">
+            <div class="container mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                    <div>
+                        <h2 class="font-display text-3xl md:text-4xl font-bold mb-2">TOP <span class="text-jet-gold">WINNERS</span></h2>
+                        <p class="text-gray-400 text-sm">This week's biggest winners</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="switchLeaderboardPeriod('today')" class="period-btn active px-4 py-2 rounded-full text-sm font-bold bg-jet-gold text-black" data-period="today">Today</button>
+                        <button onclick="switchLeaderboardPeriod('week')" class="period-btn px-4 py-2 rounded-full text-sm font-bold bg-jet-card text-gray-400 border border-white/10" data-period="week">Week</button>
+                        <button onclick="switchLeaderboardPeriod('month')" class="period-btn px-4 py-2 rounded-full text-sm font-bold bg-jet-card text-gray-400 border border-white/10" data-period="month">Month</button>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-white/10 text-left text-xs uppercase tracking-wider text-gray-400">
+                                    <th class="p-4">Rank</th>
+                                    <th class="p-4">Player</th>
+                                    <th class="p-4 text-right">Win Amount</th>
+                                    <th class="p-4 text-right hidden md:table-cell">Game</th>
+                                    <th class="p-4 text-right hidden md:table-cell">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-body">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIP Section -->
+        <section id="vip" class="py-16 md:py-24 px-4 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-purple-900/20 to-transparent"></div>
+            <div class="container mx-auto relative z-10">
+                <div class="text-center mb-12">
+                    <i class="fas fa-crown text-5xl text-jet-gold mb-4 animate-pulse-slow"></i>
+                    <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">VIP <span class="text-jet-gold">PROGRAM</span></h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">Unlock exclusive rewards, personal managers, and luxury gifts as you climb the VIP ladder</p>
+                </div>
+
+                <div class="grid md:grid-cols-5 gap-4 mb-12">
+                    <div class="glass-card p-4 rounded-xl text-center opacity-50">
+                        <div class="text-2xl mb-2">🥉</div>
+                        <div class="font-bold text-sm">Bronze</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-xl text-center opacity-70">
+                        <div class="text-2xl mb-2">🥈</div>
+                        <div class="font-bold text-sm">Silver</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-xl text-center border-2 border-jet-gold shadow-lg shadow-jet-gold/20">
+                        <div class="text-2xl mb-2">🥇</div>
+                        <div class="font-bold text-sm text-jet-gold">Gold</div>
+                        <div class="text-xs text-gray-400 mt-1">Current</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-xl text-center">
+                        <div class="text-2xl mb-2">💎</div>
+                        <div class="font-bold text-sm">Platinum</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-xl text-center">
+                        <div class="text-2xl mb-2">👑</div>
+                        <div class="font-bold text-sm">Diamond</div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button onclick="openVIPDetails()" class="btn-outline px-8 py-4 rounded-full font-bold text-lg">
+                        VIEW VIP BENEFITS
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-jet-darker border-t border-white/5 py-12 px-4">
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fas fa-jet-fighter-up text-jet-gold text-2xl"></i>
+                        <span class="font-display text-2xl font-bold">JET<span class="text-jet-gold">777</span></span>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-4">The ultimate destination for premium social gaming entertainment.</p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 rounded-full bg-jet-card flex items-center justify-center text-gray-400 hover:bg-jet-gold hover:text-black transition-all active:scale-95">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-jet-card flex items-center justify-center text-gray-400 hover:bg-jet-gold hover:text-black transition-all active:scale-95">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-jet-card flex items-center justify-center text-gray-400 hover:bg-jet-gold hover:text-black transition-all active:scale-95">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-white">Games</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-jet-gold transition-colors">Online Slots</a></li>
+                        <li><a href="#" class="hover:text-jet-gold transition-colors">Table Games</a></li>
+                        <li><a href="#" class="hover:text-jet-gold transition-colors">Live Casino</a></li>
+                        <li><a href="#" class="hover:text-jet-gold transition-colors">Jackpots</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-white">Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-jet-gold transition-colors">Help Center</a></li>
+                        <li><a href="#" class="hover:text-jet-gold transition-colors">Responsible Gaming</a></li>
+                        <li><a href="#" class="hover:text-jet-gold transition-colors">Terms & Conditions</a></li>
+                        <li><a href="#" class="hover:text-jet-gold transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4 text-white">Payment Methods</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="w-12 h-8 bg-jet-card rounded flex items-center justify-center text-xs text-gray-400">VISA</div>
+                        <div class="w-12 h-8 bg-jet-card rounded flex items-center justify-center text-xs text-gray-400">MC</div>
+                        <div class="w-12 h-8 bg-jet-card rounded flex items-center justify-center text-xs text-gray-400">BTC</div>
+                        <div class="w-12 h-8 bg-jet-card rounded flex items-center justify-center text-xs text-gray-400">ETH</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 pt-8 text-center text-xs text-gray-600">
+                <p class="mb-2">&copy; 2024 JET777. All rights reserved.</p>
+                <p>18+ Only. Please gamble responsibly. Gambling can be addictive.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-jet-gold text-black px-6 py-3 rounded-full font-bold shadow-lg z-[200] flex items-center gap-2">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Notification</span>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeAuthModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-4">
+            <div class="glass-panel rounded-2xl p-6 md:p-8 border border-jet-gold/30">
+                <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+                
+                <div id="login-view">
+                    <h2 class="font-display text-2xl md:text-3xl font-bold mb-6 text-center">WELCOME BACK</h2>
+                    <form onsubmit="handleLogin(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-2 uppercase font-bold">Email or Username</label>
+                            <input type="text" required class="w-full bg-jet-dark border border-white/10 rounded-lg px-4 py-3 focus:border-jet-gold focus:outline-none transition-colors" placeholder="Enter your email">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-2 uppercase font-bold">Password</label>
+                            <input type="password" required class="w-full bg-jet-dark border border-white/10 rounded-lg px-4 py-3 focus:border-jet-gold focus:outline-none transition-colors" placeholder="Enter your password">
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <label class="flex items-center gap-2 text-gray-400">
+                                <input type="checkbox" class="rounded bg-jet-dark border-white/10"> Remember me
+                            </label>
+                            <a href="#" class="text-jet-gold hover:underline">Forgot?</a>
+                        </div>
+                        <button type="submit" class="btn-gold w-full py-4 rounded-lg font-bold text-lg">LOG IN</button>
+                    </form>
+                    <p class="mt-6 text-center text-gray-400">Don't have an account? <button onclick="switchAuth('register')" class="text-jet-gold font-bold hover:underline">Sign Up</button></p>
+                </div>
+
+                <div id="register-view" class="hidden">
+                    <h2 class="font-display text-2xl md:text-3xl font-bold mb-6 text-center">CREATE ACCOUNT</h2>
+                    <form onsubmit="handleRegister(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-2 uppercase font-bold">Username</label>
+                            <input type="text" required class="w-full bg-jet-dark border border-white/10 rounded-lg px-4 py-3 focus:border-jet-gold focus:outline-none transition-colors" placeholder="Choose username">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-2 uppercase font-bold">Email</label>
+                            <input type="email" required class="w-full bg-jet-dark border border-white/10 rounded-lg px-4 py-3 focus:border-jet-gold focus:outline-none transition-colors" placeholder="Enter email">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-2 uppercase font-bold">Password</label>
+                            <input type="password" required class="w-full bg-jet-dark border border-white/10 rounded-lg px-4 py-3 focus:border-jet-gold focus:outline-none transition-colors" placeholder="Create password">
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <input type="checkbox" required class="mt-1 rounded bg-jet-dark border-white/10">
+                            <label class="text-xs text-gray-400">I agree to the <a href="#" class="text-jet-gold hover:underline">Terms</a> and confirm I am 18+</label>
+                        </div>
+                        <button type="submit" class="w-full py-4 rounded-lg bg-jet-accent hover:bg-red-600 text-white font-bold text-lg transition-colors">CREATE ACCOUNT</button>
+                    </form>
+                    <p class="mt-6 text-center text-gray-400">Already have an account? <button onclick="switchAuth('login')" class="text-jet-gold font-bold hover:underline">Log In</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modal -->
+    <div id="game-modal" class="fixed inset-0 z-[150] hidden">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="closeGameModal()"></div>
+        <div class="absolute inset-0 md:inset-10 lg:inset-20 bg-jet-card rounded-none md:rounded-2xl overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-white/10 bg-jet-darker">
+                <div class="flex items-center gap-3">
+                    <div id="game-modal-icon" class="w-10 h-10 rounded bg-jet-gold/20 flex items-center justify-center text-jet-gold text-xl">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <h3 id="game-modal-title" class="font-display font-bold text-lg">Game Title</h3>
+                        <span class="text-xs text-jet-gold" id="game-modal-type">Slot Game</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center gap-2 bg-jet-dark px-4 py-2 rounded-full">
+                        <i class="fas fa-coins text-jet-gold"></i>
+                        <span id="game-balance" class="font-bold text-jet-gold">100,000</span>
+                    </div>
+                    <button onclick="closeGameModal()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex-1 flex items-center justify-center bg-jet-dark relative overflow-hidden p-4">
+                <div id="game-canvas" class="w-full h-full flex items-center justify-center">
+                    <!-- Game content injected here -->
+                </div>
+                
+                <!-- Game Controls -->
+                <div id="game-controls" class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent hidden">
+                    <!-- Controls injected per game -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-jet-darker/95 backdrop-blur-md border-t border-white/10 z-40">
+        <div class="flex justify-around items-center h-16">
+            <button onclick="goHome()" class="flex flex-col items-center gap-1 text-jet-gold">
+                <i class="fas fa-home text-lg"></i>
+                <span class="text-[10px] font-bold">Home</span>
+            </button>
+            <button onclick="showSection('games')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white">
+                <i class="fas fa-gamepad text-lg"></i>
+                <span class="text-[10px] font-bold">Games</span>
+            </button>
+            <button onclick="openSearch()" class="flex flex-col items-center gap-1 -mt-6">
+                <div class="w-14 h-14 rounded-full btn-gold flex items-center justify-center shadow-lg">
+                    <i class="fas fa-search text-xl text-black"></i>
+                </div>
+            </button>
+            <button onclick="showSection('promotions')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white">
+                <i class="fas fa-gift text-lg"></i>
+                <span class="text-[10px] font-bold">Promos</span>
+            </button>
+            <button onclick="openProfile()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white">
+                <i class="fas fa-user text-lg"></i>
+                <span class="text-[10px] font-bold">Profile</span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        // Enhanced Game Data with SVG/Canvas-based previews
+        const games = [
+            { 
+                id: 1, 
+                name: "Neon Vegas", 
+                category: "slots", 
+                type: "slot",
+                rtp: "96.5%", 
+                hot: true,
+                minBet: 10,
+                maxBet: 10000,
+                description: "Classic Vegas-style slot with neon aesthetics"
+            },
+            { 
+                id: 2, 
+                name: "Dragon's Gold", 
+                category: "slots", 
+                type: "slot",
+                rtp: "97.2%", 
+                hot: true,
+                minBet: 20,
+                maxBet: 5000,
+                description: "Asian-themed adventure slot"
+            },
+            { 
+                id: 3, 
+                name: "Cyber Poker", 
+                category: "table", 
+                type: "poker",
+                rtp: "99.1%", 
+                new: true,
+                minBet: 100,
+                maxBet: 50000,
+                description: "Texas Hold'em with futuristic UI"
+            },
+            { 
+                id: 4, 
+                name: "Royal Blackjack", 
+                category: "table", 
+                type: "blackjack",
+                rtp: "99.5%", 
+                vip: true,
+                minBet: 50,
+                maxBet: 100000,
+                description: "Classic 21 with side bets"
+            },
+            { 
+                id: 5, 
+                name: "Roulette Pro", 
+                category: "table", 
+                type: "roulette",
+                rtp: "97.3%",
+                minBet: 10,
+                maxBet: 25000,
+                description: "European roulette with racetrack"
+            },
+            { 
+                id: 6, 
+                name: "Space Fortune", 
+                category: "slots", 
+                type: "slot",
+                rtp: "96.2%", 
+                new: true,
+                minBet: 10,
+                maxBet: 10000,
+                description: "Sci-fi adventure with expanding wilds"
+            },
+            { 
+                id: 7, 
+                name: "Craps Master", 
+                category: "table", 
+                type: "craps",
+                rtp: "98.6%",
+                minBet: 25,
+                maxBet: 15000,
+                description: "Roll the dice in this classic"
+            },
+            { 
+                id: 8, 
+                name: "Baccarat VIP", 
+                category: "live", 
+                type: "baccarat",
+                rtp: "98.9%", 
+                vip: true,
+                minBet: 100,
+                maxBet: 200000,
+                description: "High-stakes baccarat for VIPs"
+            }
+        ];
+
+        const slotSymbols = ['7️⃣', '💎', '🎰', '💰', '🍀', '⭐', '🔔', '🍒'];
+        const cardSuits = ['♠️', '♥️', '♦️', '♣️'];
+        const cardValues = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+        const leaderboardData = [
+            { rank: 1, name: "KingSlayer99", avatar: "Felix", amount: 854320, game: "Neon Vegas", time: "2m ago", vip: 12 },
+            { rank: 2, name: "LuckyCharm", avatar: "Aneka", amount: 721500, game: "Dragon's Gold", time: "5m ago", vip: 10 },
+            { rank: 3, name: "HighRoller_X", avatar: "Zack", amount: 648000, game: "Royal Blackjack", time: "12m ago", vip: 9 },
+            { rank: 4, name: "SpinMaster", avatar: "Molly", amount: 512000, game: "Neon Vegas", time: "18m ago", vip: 8 },
+            { rank: 5, name: "DemoKing", avatar: "Bob", amount: 485000, game: "Cyber Poker", time: "25m ago", vip: 7 },
+            { rank: 6, name: "QueenBee", avatar: "Sarah", amount: 423000, game: "Roulette Pro", time: "32m ago", vip: 8 },
+            { rank: 7, name: "JackpotJoe", avatar: "Mike", amount: 389000, game: "Space Fortune", time: "45m ago", vip: 6 },
+            { rank: 8, name: "LunaStar", avatar: "Jessica", amount: 356000, game: "Dragon's Gold", time: "1h ago", vip: 7 }
+        ];
+
+        // State
+        let currentUser = null;
+        let userBalance = 100000;
+        let currentCategory = 'all';
+        let currentGame = null;
+        let gameInterval = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGames();
+            renderLeaderboard();
+            animateJackpot();
+            createFloatingCoins();
+            
+            const saved = localStorage.getItem('jet777_user');
+            if (saved) {
+                currentUser = JSON.parse(saved);
+                updateUIForUser();
+            }
+        });
+
+        // Generate Game Preview HTML
+        function generateGamePreview(game) {
+            switch(game.type) {
+                case 'slot':
+                    return `
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-900/50 to-blue-900/50 relative overflow-hidden">
+                            <div class="absolute inset-0 flex items-center justify-center gap-2 opacity-30">
+                                ${Array(3).fill(0).map(() => `
+                                    <div class="w-16 h-24 bg-black/50 rounded-lg flex items-center justify-center text-4xl border border-white/10">
+                                        ${slotSymbols[Math.floor(Math.random() * slotSymbols.length)]}
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                            <i class="fas fa-slot-machine text-6xl text-jet-gold/50 absolute"></i>
+                        </div>
+                    `;
+                case 'blackjack':
+                    return `
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-green-900/50 to-green-800/50 relative">
+                            <div class="absolute inset-0 flex items-center justify-center gap-[-20px]">
+                                ${['A♠️', 'K♥️'].map((card, i) => `
+                                    <div class="card ${card.includes('♥️') || card.includes('♦️') ? 'red' : 'black'}" style="transform: rotate(${i === 0 ? '-15deg' : '15deg'}) translateX(${i === 0 ? '-20px' : '20px'})">
+                                        <div class="text-sm absolute top-1 left-1">${card}</div>
+                                        <div class="text-3xl">${card.slice(-2)}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4 h-2 bg-black/30 rounded-full overflow-hidden">
+                                <div class="h-full bg-jet-gold w-2/3"></div>
+                            </div>
+                        </div>
+                    `;
+                case 'roulette':
+                    return `
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-900/30 to-black relative">
+                            <div class="w-32 h-32 rounded-full border-4 border-jet-gold relative animate-spin-slow" style="background: conic-gradient(#d00 0deg 9.73deg, #000 9.73deg 19.46deg, #d00 19.46deg 29.19deg, #000 29.19deg 38.92deg, #d00 38.92deg 48.65deg, #000 48.65deg 58.38deg, #d00 58.38deg 68.11deg, #000 68.11deg 77.84deg, #d00 77.84deg 87.57deg, #000 87.57deg 97.3deg, #d00 97.3deg 107.03deg, #000 107.03deg 116.76deg, #d00 116.76deg 126.49deg, #000 126.49deg 136.22deg, #d00 136.22deg 145.95deg, #000 145.95deg 155.68deg, #d00 155.68deg 165.41deg, #000 165.41deg 175.14deg, #d00 175.14deg 184.87deg, #000 184.87deg 194.6deg, #d00 194.6deg 204.33deg, #000 204.33deg 214.06deg, #d00 214.06deg 223.79deg, #000 223.79deg 233.52deg, #d00 233.52deg 243.25deg, #000 243.25deg 252.98deg, #d00 252.98deg 262.71deg, #000 262.71deg 272.44deg, #d00 272.44deg 282.17deg, #000 282.17deg 291.9deg, #d00 291.9deg 301.63deg, #000 301.63deg 311.36deg, #d00 311.36deg 321.09deg, #000 321.09deg 330.82deg, #d00 330.82deg 340.55deg, #000 340.55deg 350.28deg, #d00 350.28deg 360deg);">
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-jet-gold rounded-full flex items-center justify-center text-xs font-bold text-black">0</div>
+                            </div>
+                        </div>
+                    `;
+                case 'poker':
+                    return `
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900/50 to-purple-900/50 relative">
+                            <div class="flex items-center justify-center">
+                                ${['A♠️', 'K♠️', 'Q♠️', 'J♠️', '10♠️'].map((card, i) => `
+                                    <div class="poker-card ${i < 2 ? 'black' : 'red'}" style="transform: rotate(${(i - 2) * 10}deg) translateY(${Math.abs(i - 2) * -10}px); z-index: ${i}">
+                                        <div class="text-xs absolute top-1 left-1">${card}</div>
+                                        <div class="text-2xl">${card.slice(-2)}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                case 'craps':
+                    return `
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-900/50 to-orange-900/50 relative">
+                            <div class="flex gap-4">
+                                ${[1, 2].map(() => `
+                                    <div class="dice">
+                                        ${Array(9).fill(0).map((_, i) => `
+                                            <div class="dice-dot" style="opacity: ${Math.random() > 0.5 ? 1 : 0}"></div>
+                                        `).join('')}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                case 'baccarat':
+                    return `
+                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-yellow-900/50 to-amber-900/50 relative">
+                            <div class="flex gap-8 items-center">
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-400 mb-2">PLAYER</div>
+                                    <div class="card black">
+                                        <div class="text-sm">8♦️</div>
+                                    </div>
+                                </div>
+                                <div class="text-2xl text-jet-gold font-bold">VS</div>
+                                <div class="text-center">
+                                    <div class="text-xs text-gray-400 mb-2">BANKER</div>
+                                    <div class="card red">
+                                        <div class="text-sm">6♥️</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                default:
+                    return `<div class="w-full h-full bg-gradient-to-br from-jet-card to-jet-surface flex items-center justify-center"><i class="fas fa-gamepad text-4xl text-jet-gold"></i></div>`;
+            }
+        }
+
+        // Render Games
+        function renderGames() {
+            const container = document.getElementById('games-container');
+            const filtered = currentCategory === 'all' ? games : games.filter(g => g.category === currentCategory);
+            
+            container.innerHTML = filtered.map(game => `
+                <div class="game-card glass-card rounded-xl overflow-hidden group" onclick="openGame(${game.id})">
+                    <div class="relative aspect-[4/3] overflow-hidden game-preview">
+                        ${generateGamePreview(game)}
+                        <div class="play-overlay absolute inset-0 bg-black/60 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full btn-gold flex items-center justify-center">
+                                <i class="fas fa-play text-black text-xl ml-1"></i>
+                            </div>
+                        </div>
+                        ${game.hot ? '<span class="absolute top-2 left-2 bg-jet-accent text-white text-xs font-bold px-2 py-1 rounded">HOT</span>' : ''}
+                        ${game.new ? '<span class="absolute top-2 left-2 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">NEW</span>' : ''}
+                        ${game.vip ? '<span class="absolute top-2 right-2 bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded">VIP</span>' : ''}
+                    </div>
+                    <div class="p-3 md:p-4">
+                        <h3 class="font-bold text-sm md:text-base mb-1 group-hover:text-jet-gold transition-colors">${game.name}</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-gray-500">RTP ${game.rtp}</span>
+                            <span class="text-xs text-jet-gold"><i class="fas fa-star"></i> 4.9</span>
+                        </div>
+                        <div class="mt-2 text-xs text-gray-400">${game.minBet}-${game.maxBet}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter Category
+        function filterCategory(cat) {
+            currentCategory = cat;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.classList.add('bg-jet-gold', 'text-black');
+                    btn.classList.remove('bg-jet-card', 'text-gray-400');
+                } else {
+                    btn.classList.remove('bg-jet-gold', 'text-black');
+                    btn.classList.add('bg-jet-card', 'text-gray-400');
+                }
+            });
+            
+            renderGames();
+            showToast(`Showing ${cat} games`);
+        }
+
+        // Render Leaderboard
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = leaderboardData.map((player, i) => `
+                <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <td class="p-4">
+                        <div class="w-8 h-8 rounded-full ${i < 3 ? 'bg-jet-gold text-black' : 'bg-jet-card text-gray-400'} flex items-center justify-center font-bold text-sm">
+                            ${player.rank}
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${player.avatar}" class="w-10 h-10 rounded-full bg-jet-card">
+                            <div>
+                                <div class="font-bold text-sm md:text-base">${player.name}</div>
+                                <div class="text-xs text-jet-gold">VIP ${player.vip}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 text-right font-display font-bold text-jet-gold">$${player.amount.toLocaleString()}</td>
+                    <td class="p-4 text-right text-gray-400 hidden md:table-cell text-sm">${player.game}</td>
+                    <td class="p-4 text-right text-gray-500 hidden md:table-cell text-sm">${player.time}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Jackpot Animation
+        function animateJackpot() {
+            const jackpotEl = document.getElementById('jackpot-amount');
+            let baseAmount = 2456789;
+            
+            setInterval(() => {
+                baseAmount += Math.floor(Math.random() * 100);
+                jackpotEl.textContent = '$' + baseAmount.toLocaleString() + '.00';
+            }, 2000);
+        }
+
+        // Floating Coins Background
+        function createFloatingCoins() {
+            const container = document.getElementById('floating-coins');
+            
+            setInterval(() => {
+                if (document.hidden) return;
+                
+                const coin = document.createElement('div');
+                coin.className = 'coin';
+                coin.textContent = '$';
+                coin.style.left = Math.random() * 100 + '%';
+                coin.style.top = '-50px';
+                coin.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                container.appendChild(coin);
+                
+                setTimeout(() => coin.remove(), 5000);
+            }, 3000);
+        }
+
+        // Open Game with Full Gameplay
+        function openGame(gameId) {
+            const game = games.find(g => g.id === gameId);
+            if (!game) return;
+            
+            currentGame = game;
+            
+            document.getElementById('game-modal-title').textContent = game.name;
+            document.getElementById('game-modal-type').textContent = game.type.toUpperCase() + ' GAME';
+            document.getElementById('game-balance').textContent = userBalance.toLocaleString();
+            document.getElementById('game-modal').classList.remove('hidden');
+            
+            // Initialize specific game
+            switch(game.type) {
+                case 'slot':
+                    initSlotGame(game);
+                    break;
+                case 'blackjack':
+                    initBlackjackGame(game);
+                    break;
+                case 'roulette':
+                    initRouletteGame(game);
+                    break;
+                case 'poker':
+                    initPokerGame(game);
+                    break;
+                case 'craps':
+                    initCrapsGame(game);
+                    break;
+                case 'baccarat':
+                    initBaccaratGame(game);
+                    break;
+                default:
+                    initSlotGame(game);
+            }
+        }
+
+        // SLOT GAME IMPLEMENTATION
+        function initSlotGame(game) {
+            const canvas = document.getElementById('game-canvas');
+            const controls = document.getElementById('game-controls');
+            
+            canvas.innerHTML = `
+                <div class="w-full max-w-2xl">
+                    <div class="slot-machine w-full aspect-[3/1] flex mb-4 bg-black rounded-xl overflow-hidden border-4 border-jet-gold shadow-2xl shadow-jet-gold/20">
+                        <div class="slot-reel flex-1 flex flex-col items-center justify-center text-5xl md:text-7xl relative overflow-hidden" id="slot-reel-0">
+                            <div class="reel-content transition-transform duration-100">7️⃣</div>
+                        </div>
+                        <div class="slot-reel flex-1 flex flex-col items-center justify-center text-5xl md:text-7xl relative overflow-hidden" id="slot-reel-1">
+                            <div class="reel-content transition-transform duration-100">7️⃣</div>
+                        </div>
+                        <div class="slot-reel flex-1 flex flex-col items-center justify-center text-5xl md:text-7xl relative overflow-hidden" id="slot-reel-2">
+                            <div class="reel-content transition-transform duration-100">7️⃣</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-jet-gold font-bold text-xl mb-2" id="slot-message">Press SPIN to play!</div>
+                        <div class="text-gray-400 text-sm">Match 3 symbols to win!</div>
+                    </div>
+                </div>
+            `;
+            
+            controls.innerHTML = `
+                <div class="flex flex-col gap-4 max-w-md mx-auto w-full">
+                    <div class="flex justify-between items-center bg-jet-card/50 rounded-lg p-3">
+                        <div>
+                            <div class="text-xs text-gray-400">BET AMOUNT</div>
+                            <div class="font-bold text-jet-gold" id="current-bet">100</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="changeBet(-50)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">-</button>
+                            <button onclick="changeBet(50)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">+</button>
+                        </div>
+                    </div>
+                    <button onclick="spinSlot()" class="btn-gold w-full py-4 rounded-xl text-xl font-bold flex items-center justify-center gap-2">
+                        <i class="fas fa-sync-alt"></i> SPIN
+                    </button>
+                </div>
+            `;
+            controls.classList.remove('hidden');
+            
+            window.currentBet = 100;
+        }
+
+        function changeBet(amount) {
+            window.currentBet = Math.max(10, Math.min(10000, window.currentBet + amount));
+            document.getElementById('current-bet').textContent = window.currentBet;
+        }
+
+        function spinSlot() {
+            if (userBalance < window.currentBet) {
+                showToast('Insufficient balance!');
+                return;
+            }
+            
+            userBalance -= window.currentBet;
+            updateBalance();
+            
+            const reels = [0, 1, 2].map(i => document.getElementById(`slot-reel-${i}`).querySelector('.reel-content'));
+            const results = [];
+            
+            // Animate reels
+            reels.forEach((reel, index) => {
+                let spins = 0;
+                const maxSpins = 20 + index * 10;
+                
+                const spin = setInterval(() => {
+                    reel.textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                    reel.style.transform = `translateY(${Math.random() * 20 - 10}px)`;
+                    spins++;
+                    
+                    if (spins >= maxSpins) {
+                        clearInterval(spin);
+                        const finalSymbol = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                        reel.textContent = finalSymbol;
+                        reel.style.transform = 'translateY(0)';
+                        results.push(finalSymbol);
+                        
+                        if (results.length === 3) checkWin(results);
+                    }
+                }, 50);
+            });
+            
+            document.getElementById('slot-message').textContent = 'Good luck!';
+        }
+
+        function checkWin(results) {
+            const message = document.getElementById('slot-message');
+            
+            if (results[0] === results[1] && results[1] === results[2]) {
+                const win = window.currentBet * 10;
+                userBalance += win;
+                message.textContent = `JACKPOT! You won ${win.toLocaleString()}!`;
+                message.className = 'text-green-400 font-bold text-xl mb-2';
+                createCoinExplosion();
+                showToast(`Jackpot! +${win.toLocaleString()}`);
+            } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
+                const win = window.currentBet * 2;
+                userBalance += win;
+                message.textContent = `Nice! You won ${win.toLocaleString()}!`;
+                message.className = 'text-jet-gold font-bold text-xl mb-2';
+                showToast(`Win! +${win.toLocaleString()}`);
+            } else {
+                message.textContent = 'Try again!';
+                message.className = 'text-gray-400 font-bold text-xl mb-2';
+            }
+            
+            updateBalance();
+        }
+
+        // BLACKJACK GAME IMPLEMENTATION
+        function initBlackjackGame(game) {
+            const canvas = document.getElementById('game-canvas');
+            const controls = document.getElementById('game-controls');
+            
+            window.blackjackState = {
+                playerCards: [],
+                dealerCards: [],
+                deck: generateDeck(),
+                gameActive: false,
+                playerScore: 0,
+                dealerScore: 0
+            };
+            
+            canvas.innerHTML = `
+                <div class="w-full max-w-3xl h-full flex flex-col justify-between py-4">
+                    <!-- Dealer -->
+                    <div class="text-center">
+                        <div class="text-sm text-gray-400 mb-2">DEALER <span id="dealer-score" class="text-jet-gold"></span></div>
+                        <div class="flex justify-center gap-2" id="dealer-hand"></div>
+                    </div>
+                    
+                    <!-- Table Message -->
+                    <div class="text-center py-8">
+                        <div id="blackjack-message" class="text-2xl font-bold text-jet-gold">Place your bet!</div>
+                    </div>
+                    
+                    <!-- Player -->
+                    <div class="text-center">
+                        <div class="flex justify-center gap-2 mb-2" id="player-hand"></div>
+                        <div class="text-sm text-gray-400">YOU <span id="player-score" class="text-jet-gold">0</span></div>
+                    </div>
+                </div>
+            `;
+            
+            controls.innerHTML = `
+                <div class="flex flex-col gap-4 max-w-md mx-auto w-full">
+                    <div class="flex justify-between items-center bg-jet-card/50 rounded-lg p-3">
+                        <div>
+                            <div class="text-xs text-gray-400">BET</div>
+                            <div class="font-bold text-jet-gold" id="bj-bet">100</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="changeBJBet(-50)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">-</button>
+                            <button onclick="changeBJBet(50)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">+</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2" id="bj-controls">
+                        <button onclick="dealBlackjack()" class="btn-gold py-3 rounded-xl font-bold col-span-2">DEAL</button>
+                    </div>
+                </div>
+            `;
+            controls.classList.remove('hidden');
+            
+            window.bjBet = 100;
+        }
+
+        function generateDeck() {
+            const deck = [];
+            for (const suit of ['♠️', '♥️', '♦️', '♣️']) {
+                for (const value of cardValues) {
+                    deck.push({ suit, value, numeric: getCardValue(value) });
+                }
+            }
+            return shuffle(deck);
+        }
+
+        function getCardValue(value) {
+            if (['J', 'Q', 'K'].includes(value)) return 10;
+            if (value === 'A') return 11;
+            return parseInt(value);
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function changeBJBet(amount) {
+            window.bjBet = Math.max(50, Math.min(10000, window.bjBet + amount));
+            document.getElementById('bj-bet').textContent = window.bjBet;
+        }
+
+        function dealBlackjack() {
+            if (userBalance < window.bjBet) {
+                showToast('Insufficient balance!');
+                return;
+            }
+            
+            userBalance -= window.bjBet;
+            updateBalance();
+            
+            const state = window.blackjackState;
+            state.gameActive = true;
+            state.playerCards = [state.deck.pop(), state.deck.pop()];
+            state.dealerCards = [state.deck.pop(), state.deck.pop()];
+            
+            updateBlackjackDisplay();
+            
+            document.getElementById('bj-controls').innerHTML = `
+                <button onclick="hit()" class="btn-gold py-3 rounded-xl font-bold">HIT</button>
+                <button onclick="stand()" class="btn-outline py-3 rounded-xl font-bold">STAND</button>
+                <button onclick="doubleDown()" class="bg-blue-500 text-white py-3 rounded-xl font-bold col-span-2">DOUBLE DOWN</button>
+            `;
+            
+            document.getElementById('blackjack-message').textContent = 'Your turn!';
+            
+            if (calculateScore(state.playerCards) === 21) {
+                blackjackWin();
+            }
+        }
+
+        function updateBlackjackDisplay() {
+            const state = window.blackjackState;
+            
+            document.getElementById('player-hand').innerHTML = state.playerCards.map((card, i) => `
+                <div class="card ${card.suit === '♥️' || card.suit === '♦️' ? 'red' : 'black'}" style="animation: dealCard 0.3s ${i * 0.1}s ease-out;">
+                    <div class="text-xs absolute top-1 left-1">${card.value}</div>
+                    <div class="text-2xl">${card.suit}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('dealer-hand').innerHTML = state.dealerCards.map((card, i) => `
+                <div class="card ${card.suit === '♥️' || card.suit === '♦️' ? 'red' : 'black'} ${i === 1 && state.gameActive ? 'bg-jet-dark' : ''}" style="animation: dealCard 0.3s ${i * 0.1}s ease-out;">
+                    ${i === 1 && state.gameActive ? '<i class="fas fa-question text-gray-400"></i>' : `
+                        <div class="text-xs absolute top-1 left-1">${card.value}</div>
+                        <div class="text-2xl">${card.suit}</div>
+                    `}
+                </div>
+            `).join('');
+            
+            document.getElementById('player-score').textContent = calculateScore(state.playerCards);
+            if (!state.gameActive) {
+                document.getElementById('dealer-score').textContent = calculateScore(state.dealerCards);
+            }
+        }
+
+        function calculateScore(cards) {
+            let score = cards.reduce((sum, card) => sum + card.numeric, 0);
+            let aces = cards.filter(c => c.value === 'A').length;
+            
+            while (score > 21 && aces > 0) {
+                score -= 10;
+                aces--;
+            }
+            
+            return score;
+        }
+
+        function hit() {
+            const state = window.blackjackState;
+            state.playerCards.push(state.deck.pop());
+            updateBlackjackDisplay();
+            
+            const score = calculateScore(state.playerCards);
+            if (score > 21) {
+                blackjackLose();
+            } else if (score === 21) {
+                stand();
+            }
+        }
+
+        function stand() {
+            const state = window.blackjackState;
+            state.gameActive = false;
+            
+            // Dealer plays
+            while (calculateScore(state.dealerCards) < 17) {
+                state.dealerCards.push(state.deck.pop());
+            }
+            
+            updateBlackjackDisplay();
+            
+            const playerScore = calculateScore(state.playerCards);
+            const dealerScore = calculateScore(state.dealerCards);
+            
+            if (dealerScore > 21 || playerScore > dealerScore) {
+                blackjackWin();
+            } else if (playerScore === dealerScore) {
+                blackjackPush();
+            } else {
+                blackjackLose();
+            }
+        }
+
+        function doubleDown() {
+            if (userBalance < window.bjBet) {
+                showToast('Insufficient balance!');
+                return;
+            }
+            userBalance -= window.bjBet;
+            window.bjBet *= 2;
+            updateBalance();
+            hit();
+            if (window.blackjackState.gameActive) {
+                setTimeout(stand, 500);
+            }
+        }
+
+        function blackjackWin() {
+            const win = window.bjBet * 2;
+            userBalance += win;
+            updateBalance();
+            document.getElementById('blackjack-message').textContent = `You win ${win}!`;
+            document.getElementById('blackjack-message').className = 'text-2xl font-bold text-green-400';
+            createCoinExplosion();
+            resetBlackjack();
+        }
+
+        function blackjackPush() {
+            userBalance += window.bjBet;
+            updateBalance();
+            document.getElementById('blackjack-message').textContent = 'Push! Bet returned.';
+            document.getElementById('blackjack-message').className = 'text-2xl font-bold text-jet-gold';
+            resetBlackjack();
+        }
+
+        function blackjackLose() {
+            document.getElementById('blackjack-message').textContent = 'Dealer wins!';
+            document.getElementById('blackjack-message').className = 'text-2xl font-bold text-gray-400';
+            resetBlackjack();
+        }
+
+        function resetBlackjack() {
+            setTimeout(() => {
+                document.getElementById('bj-controls').innerHTML = `
+                    <button onclick="dealBlackjack()" class="btn-gold py-3 rounded-xl font-bold col-span-2">DEAL</button>
+                `;
+                window.bjBet = 100;
+                document.getElementById('bj-bet').textContent = '100';
+                window.blackjackState = {
+                    playerCards: [],
+                    dealerCards: [],
+                    deck: generateDeck(),
+                    gameActive: false,
+                    playerScore: 0,
+                    dealerScore: 0
+                };
+                document.getElementById('player-hand').innerHTML = '';
+                document.getElementById('dealer-hand').innerHTML = '';
+                document.getElementById('player-score').textContent = '0';
+                document.getElementById('dealer-score').textContent = '';
+            }, 2000);
+        }
+
+        // ROULETTE GAME IMPLEMENTATION
+        function initRouletteGame(game) {
+            const canvas = document.getElementById('game-canvas');
+            const controls = document.getElementById('game-controls');
+            
+            canvas.innerHTML = `
+                <div class="w-full max-w-2xl flex flex-col items-center">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 mb-6">
+                        <div id="roulette-wheel" class="w-full h-full rounded-full relative" style="background: conic-gradient(from 0deg, #d00 0deg 9.73deg, #000 9.73deg 19.46deg, #d00 19.46deg 29.19deg, #000 29.19deg 38.92deg, #d00 38.92deg 48.65deg, #000 48.65deg 58.38deg, #d00 58.38deg 68.11deg, #000 68.11deg 77.84deg, #d00 77.84deg 87.57deg, #000 87.57deg 97.3deg, #d00 97.3deg 107.03deg, #000 107.03deg 116.76deg, #d00 116.76deg 126.49deg, #000 126.49deg 136.22deg, #d00 136.22deg 145.95deg, #000 145.95deg 155.68deg, #d00 155.68deg 165.41deg, #000 165.41deg 175.14deg, #d00 175.14deg 184.87deg, #000 184.87deg 194.6deg, #d00 194.6deg 204.33deg, #000 204.33deg 214.06deg, #d00 214.06deg 223.79deg, #000 223.79deg 233.52deg, #d00 233.52deg 243.25deg, #000 243.25deg 252.98deg, #d00 252.98deg 262.71deg, #000 262.71deg 272.44deg, #d00 272.44deg 282.17deg, #000 282.17deg 291.9deg, #d00 291.9deg 301.63deg, #000 301.63deg 311.36deg, #d00 311.36deg 321.09deg, #000 321.09deg 330.82deg, #d00 330.82deg 340.55deg, #000 340.55deg 350.28deg, #d00 350.28deg 360deg); transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);">
+                            <div class="absolute top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-16 border-l-transparent border-r-transparent border-t-jet-gold z-10"></div>
+                            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-jet-gold rounded-full flex items-center justify-center text-2xl font-bold text-black shadow-lg">
+                                <i class="fas fa-diamond"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="roulette-result" class="text-2xl font-bold text-jet-gold h-8"></div>
+                </div>
+            `;
+            
+            controls.innerHTML = `
+                <div class="flex flex-col gap-4 max-w-md mx-auto w-full">
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="placeRouletteBet('red', 100)" class="bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-bold">RED</button>
+                        <button onclick="placeRouletteBet('black', 100)" class="bg-black border border-white/30 hover:bg-gray-900 text-white py-3 rounded-lg font-bold">BLACK</button>
+                        <button onclick="placeRouletteBet('green', 100)" class="bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold">0</button>
+                    </div>
+                    <div class="flex justify-between items-center bg-jet-card/50 rounded-lg p-3">
+                        <div>
+                            <div class="text-xs text-gray-400">BET AMOUNT</div>
+                            <div class="font-bold text-jet-gold" id="roulette-bet">100</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="changeRouletteBet(-50)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">-</button>
+                            <button onclick="changeRouletteBet(50)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">+</button>
+                        </div>
+                    </div>
+                    <button onclick="spinRoulette()" id="spin-btn" class="btn-gold w-full py-4 rounded-xl text-xl font-bold">
+                        SPIN WHEEL
+                    </button>
+                </div>
+            `;
+            controls.classList.remove('hidden');
+            
+            window.rouletteBet = 100;
+            window.rouletteSelection = null;
+        }
+
+        function changeRouletteBet(amount) {
+            window.rouletteBet = Math.max(10, Math.min(10000, window.rouletteBet + amount));
+            document.getElementById('roulette-bet').textContent = window.rouletteBet;
+        }
+
+        function placeRouletteBet(type, amount) {
+            window.rouletteSelection = type;
+            showToast(`Bet placed on ${type.toUpperCase()}`);
+        }
+
+        function spinRoulette() {
+            if (!window.rouletteSelection) {
+                showToast('Place a bet first!');
+                return;
+            }
+            if (userBalance < window.rouletteBet) {
+                showToast('Insufficient balance!');
+                return;
+            }
+            
+            userBalance -= window.rouletteBet;
+            updateBalance();
+            
+            const wheel = document.getElementById('roulette-wheel');
+            const spinBtn = document.getElementById('spin-btn');
+            spinBtn.disabled = true;
+            spinBtn.textContent = 'SPINNING...';
+            
+            const rotations = 5 + Math.random() * 5;
+            const finalAngle = Math.random() * 360;
+            const totalRotation = rotations * 360 + finalAngle;
+            
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            
+            setTimeout(() => {
+                const normalizedAngle = finalAngle % 360;
+                const segment = Math.floor(normalizedAngle / 9.73);
+                const isRed = [0, 2, 4, 6, 8, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35].includes(segment);
+                const isGreen = segment === 0;
+                
+                let result;
+                if (isGreen) result = 'green';
+                else if (isRed) result = 'red';
+                else result = 'black';
+                
+                document.getElementById('roulette-result').textContent = `Result: ${result.toUpperCase()}`;
+                
+                if (result === window.rouletteSelection) {
+                    const multiplier = result === 'green' ? 35 : 2;
+                    const win = window.rouletteBet * multiplier;
+                    userBalance += win;
+                    updateBalance();
+                    showToast(`You won ${win.toLocaleString()}!`);
+                    createCoinExplosion();
+                } else {
+                    showToast('Better luck next time!');
+                }
+                
+                spinBtn.disabled = false;
+                spinBtn.textContent = 'SPIN AGAIN';
+                window.rouletteSelection = null;
+            }, 4000);
+        }
+
+        // POKER GAME (Simplified)
+        function initPokerGame(game) {
+            const canvas = document.getElementById('game-canvas');
+            const controls = document.getElementById('game-controls');
+            
+            canvas.innerHTML = `
+                <div class="w-full max-w-3xl flex flex-col items-center justify-center h-full">
+                    <div class="text-center mb-8">
+                        <div class="text-gray-400 mb-4">Your Hand</div>
+                        <div class="flex gap-2" id="poker-hand">
+                            ${generatePokerHand()}
+                        </div>
+                    </div>
+                    <div id="poker-result" class="text-2xl font-bold text-jet-gold h-8"></div>
+                </div>
+            `;
+            
+            controls.innerHTML = `
+                <div class="flex flex-col gap-4 max-w-md mx-auto w-full">
+                    <div class="flex justify-between items-center bg-jet-card/50 rounded-lg p-3">
+                        <div>
+                            <div class="text-xs text-gray-400">BET</div>
+                            <div class="font-bold text-jet-gold" id="poker-bet">200</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="changePokerBet(-100)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">-</button>
+                            <button onclick="changePokerBet(100)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">+</button>
+                        </div>
+                    </div>
+                    <button onclick="dealPoker()" class="btn-gold w-full py-4 rounded-xl text-xl font-bold">
+                        DEAL HAND
+                    </button>
+                </div>
+            `;
+            controls.classList.remove('hidden');
+            
+            window.pokerBet = 200;
+        }
+
+        function generatePokerHand() {
+            const hand = [];
+            const used = new Set();
+            
+            while (hand.length < 5) {
+                const suit = cardSuits[Math.floor(Math.random() * cardSuits.length)];
+                const value = cardValues[Math.floor(Math.random() * cardValues.length)];
+                const key = `${value}${suit}`;
+                
+                if (!used.has(key)) {
+                    used.add(key);
+                    hand.push({ suit, value });
+                }
+            }
+            
+            return hand.map(card => `
+                <div class="poker-card ${card.suit === '♥️' || card.suit === '♦️' ? 'red' : 'black'}">
+                    <div class="text-xs absolute top-1 left-1">${card.value}</div>
+                    <div class="text-xl">${card.suit}</div>
+                </div>
+            `).join('');
+        }
+
+        function changePokerBet(amount) {
+            window.pokerBet = Math.max(100, Math.min(50000, window.pokerBet + amount));
+            document.getElementById('poker-bet').textContent = window.pokerBet;
+        }
+
+        function dealPoker() {
+            if (userBalance < window.pokerBet) {
+                showToast('Insufficient balance!');
+                return;
+            }
+            
+            userBalance -= window.pokerBet;
+            updateBalance();
+            
+            document.getElementById('poker-hand').innerHTML = generatePokerHand();
+            
+            // Simplified win condition (random for demo)
+            const win = Math.random() > 0.6;
+            if (win) {
+                const multiplier = Math.floor(Math.random() * 5) + 1;
+                const winAmount = window.pokerBet * multiplier;
+                userBalance += winAmount;
+                updateBalance();
+                document.getElementById('poker-result').textContent = `Win! ${winAmount.toLocaleString()}`;
+                createCoinExplosion();
+            } else {
+                document.getElementById('poker-result').textContent = 'Try again!';
+            }
+        }
+
+        // CRAPS GAME
+        function initCrapsGame(game) {
+            const canvas = document.getElementById('game-canvas');
+            const controls = document.getElementById('game-controls');
+            
+            canvas.innerHTML = `
+                <div class="w-full max-w-md flex flex-col items-center justify-center h-full">
+                    <div class="flex gap-8 mb-8">
+                        <div class="dice" id="die1">
+                            ${Array(9).fill(0).map(() => `<div class="dice-dot" style="opacity: 0"></div>`).join('')}
+                        </div>
+                        <div class="dice" id="die2">
+                            ${Array(9).fill(0).map(() => `<div class="dice-dot" style="opacity: 0"></div>`).join('')}
+                        </div>
+                    </div>
+                    <div id="craps-total" class="text-4xl font-bold text-jet-gold h-12"></div>
+                    <div id="craps-message" class="text-lg text-gray-400 mt-4"></div>
+                </div>
+            `;
+            
+            controls.innerHTML = `
+                <div class="flex flex-col gap-4 max-w-md mx-auto w-full">
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="placeCrapsBet('pass')" class="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold">PASS LINE</button>
+                        <button onclick="placeCrapsBet('dontpass')" class="bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-bold">DON'T PASS</button>
+                    </div>
+                    <div class="flex justify-between items-center bg-jet-card/50 rounded-lg p-3">
+                        <div>
+                            <div class="text-xs text-gray-400">BET</div>
+                            <div class="font-bold text-jet-gold" id="craps-bet">100</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="changeCrapsBet(-50)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">-</button>
+                            <button onclick="changeCrapsBet(50)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">+</button>
+                        </div>
+                    </div>
+                    <button onclick="rollDice()" id="roll-btn" class="btn-gold w-full py-4 rounded-xl text-xl font-bold">
+                        ROLL DICE
+                    </button>
+                </div>
+            `;
+            controls.classList.remove('hidden');
+            
+            window.crapsBet = 100;
+            window.crapsSelection = null;
+        }
+
+        function changeCrapsBet(amount) {
+            window.crapsBet = Math.max(10, Math.min(10000, window.crapsBet + amount));
+            document.getElementById('craps-bet').textContent = window.crapsBet;
+        }
+
+        function placeCrapsBet(type) {
+            window.crapsSelection = type;
+            showToast(`Bet placed: ${type === 'pass' ? 'PASS LINE' : 'DON\'T PASS'}`);
+        }
+
+        function rollDice() {
+            if (!window.crapsSelection) {
+                showToast('Place a bet first!');
+                return;
+            }
+            if (userBalance < window.crapsBet) {
+                showToast('Insufficient balance!');
+                return;
+            }
+            
+            userBalance -= window.crapsBet;
+            updateBalance();
+            
+            const die1 = Math.floor(Math.random() * 6) + 1;
+            const die2 = Math.floor(Math.random() * 6) + 1;
+            const total = die1 + die2;
+            
+            animateDice('die1', die1);
+            animateDice('die2', die2);
+            
+            setTimeout(() => {
+                document.getElementById('craps-total').textContent = total;
+                
+                let win = false;
+                if (window.crapsSelection === 'pass') {
+                    win = total === 7 || total === 11;
+                } else {
+                    win = total === 2 || total === 3 || total === 12;
+                }
+                
+                if (win) {
+                    userBalance += window.crapsBet * 2;
+                    updateBalance();
+                    document.getElementById('craps-message').textContent = 'You win!';
+                    document.getElementById('craps-message').className = 'text-lg text-green-400 mt-4';
+                    createCoinExplosion();
+                } else {
+                    document.getElementById('craps-message').textContent = total === 7 || total === 11 ? 'Seven out!' : 'Point established!';
+                    document.getElementById('craps-message').className = 'text-lg text-gray-400 mt-4';
+                }
+            }, 1000);
+        }
+
+        function animateDice(dieId, value) {
+            const die = document.getElementById(dieId);
+            const dots = die.querySelectorAll('.dice-dot');
+            
+            // Animate rolling
+            let rolls = 0;
+            const rollInterval = setInterval(() => {
+                dots.forEach(dot => dot.style.opacity = Math.random() > 0.5 ? 1 : 0);
+                rolls++;
+                if (rolls > 10) {
+                    clearInterval(rollInterval);
+                    showDiceValue(dots, value);
+                }
+            }, 50);
+        }
+
+        function showDiceValue(dots, value) {
+            const patterns = {
+                1: [4],
+                2: [0, 8],
+                3: [0, 4, 8],
+                4: [0, 2, 6, 8],
+                5: [0, 2, 4, 6, 8],
+                6: [0, 2, 3, 5, 6, 8]
+            };
+            
+            dots.forEach((dot, i) => {
+                dot.style.opacity = patterns[value].includes(i) ? 1 : 0;
+            });
+        }
+
+        // BACCARAT GAME
+        function initBaccaratGame(game) {
+            const canvas = document.getElementById('game-canvas');
+            const controls = document.getElementById('game-controls');
+            
+            canvas.innerHTML = `
+                <div class="w-full max-w-2xl flex flex-col items-center justify-center h-full">
+                    <div class="flex justify-between w-full mb-8 px-8">
+                        <div class="text-center">
+                            <div class="text-gray-400 mb-2">PLAYER</div>
+                            <div class="flex gap-1" id="baccarat-player"></div>
+                            <div class="text-jet-gold font-bold mt-2" id="player-total">0</div>
+                        </div>
+                        <div class="text-2xl font-bold text-jet-gold self-center">VS</div>
+                        <div class="text-center">
+                            <div class="text-gray-400 mb-2">BANKER</div>
+                            <div class="flex gap-1" id="baccarat-banker"></div>
+                            <div class="text-jet-gold font-bold mt-2" id="banker-total">0</div>
+                        </div>
+                    </div>
+                    <div id="baccarat-result" class="text-2xl font-bold h-8"></div>
+                </div>
+            `;
+            
+            controls.innerHTML = `
+                <div class="flex flex-col gap-4 max-w-md mx-auto w-full">
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="placeBaccaratBet('player')" class="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold">PLAYER</button>
+                        <button onclick="placeBaccaratBet('tie')" class="bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold">TIE</button>
+                        <button onclick="placeBaccaratBet('banker')" class="bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-bold">BANKER</button>
+                    </div>
+                    <div class="flex justify-between items-center bg-jet-card/50 rounded-lg p-3">
+                        <div>
+                            <div class="text-xs text-gray-400">BET</div>
+                            <div class="font-bold text-jet-gold" id="baccarat-bet">500</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="changeBaccaratBet(-100)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">-</button>
+                            <button onclick="changeBaccaratBet(100)" class="w-10 h-10 rounded-full bg-jet-dark border border-white/10 flex items-center justify-center active:scale-95">+</button>
+                        </div>
+                    </div>
+                    <button onclick="dealBaccarat()" class="btn-gold w-full py-4 rounded-xl text-xl font-bold">
+                        DEAL
+                    </button>
+                </div>
+            `;
+            controls.classList.remove('hidden');
+            
+            window.baccaratBet = 500;
+            window.baccaratSelection = null;
+        }
+
+        function changeBaccaratBet(amount) {
+            window.baccaratBet = Math.max(100, Math.min(200000, window.baccaratBet + amount));
+            document.getElementById('baccarat-bet').textContent = window.baccaratBet;
+        }
+
+        function placeBaccaratBet(type) {
+            window.baccaratSelection = type;
+            showToast(`Bet on ${type.toUpperCase()}`);
+        }
+
+        function dealBaccarat() {
+            if (!window.baccaratSelection) {
+                showToast('Place a bet first!');
+                return;
+            }
+            if (userBalance < window.baccaratBet) {
+                showToast('Insufficient balance!');
+                return;
+            }
+            
+            userBalance -= window.baccaratBet;
+            updateBalance();
+            
+            const playerCards = [drawCard(), drawCard()];
+            const bankerCards = [drawCard(), drawCard()];
+            
+            const playerTotal = (getCardValue(playerCards[0].value) + getCardValue(playerCards[1].value)) % 10;
+            const bankerTotal = (getCardValue(bankerCards[0].value) + getCardValue(bankerCards[1].value)) % 10;
+            
+            document.getElementById('baccarat-player').innerHTML = playerCards.map(c => `
+                <div class="card ${c.suit === '♥️' || c.suit === '♦️' ? 'red' : 'black'}" style="width: 60px; height: 84px;">
+                    <div class="text-xs absolute top-1 left-1">${c.value}</div>
+                    <div class="text-xl">${c.suit}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('baccarat-banker').innerHTML = bankerCards.map(c => `
+                <div class="card ${c.suit === '♥️' || c.suit === '♦️' ? 'red' : 'black'}" style="width: 60px; height: 84px;">
+                    <div class="text-xs absolute top-1 left-1">${c.value}</div>
+                    <div class="text-xl">${c.suit}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('player-total').textContent = playerTotal;
+            document.getElementById('banker-total').textContent = bankerTotal;
+            
+            let winner;
+            if (playerTotal > bankerTotal) winner = 'player';
+            else if (bankerTotal > playerTotal) winner = 'banker';
+            else winner = 'tie';
+            
+            setTimeout(() => {
+                if (winner === window.baccaratSelection) {
+                    const multiplier = winner === 'tie' ? 8 : 2;
+                    const win = window.baccaratBet * multiplier;
+                    userBalance += win;
+                    updateBalance();
+                    document.getElementById('baccarat-result').textContent = `You win ${win.toLocaleString()}!`;
+                    document.getElementById('baccarat-result').className = 'text-2xl font-bold text-green-400';
+                    createCoinExplosion();
+                } else {
+                    document.getElementById('baccarat-result').textContent = `${winner.toUpperCase()} wins!`;
+                    document.getElementById('baccarat-result').className = 'text-2xl font-bold text-gray-400';
+                }
+            }, 500);
+        }
+
+        function drawCard() {
+            const suit = cardSuits[Math.floor(Math.random() * cardSuits.length)];
+            const value = cardValues[Math.floor(Math.random() * cardValues.length)];
+            return { suit, value };
+        }
+
+        // Utility Functions
+        function closeGameModal() {
+            document.getElementById('game-modal').classList.add('hidden');
+            currentGame = null;
+        }
+
+        function updateBalance() {
+            document.getElementById('balance-amount').textContent = userBalance.toLocaleString();
+            document.getElementById('game-balance').textContent = userBalance.toLocaleString();
+            if (currentUser) {
+                currentUser.balance = userBalance;
+                localStorage.setItem('jet777_user', JSON.stringify(currentUser));
+            }
+        }
+
+        function createCoinExplosion() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const coin = document.createElement('div');
+                    coin.className = 'coin';
+                    coin.textContent = '$';
+                    coin.style.left = '50%';
+                    coin.style.top = '50%';
+                    coin.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`;
+                    document.getElementById('game-modal').appendChild(coin);
+                    
+                    setTimeout(() => coin.remove(), 1000);
+                }, i * 50);
+            }
+        }
+
+        // Auth Functions
+        function openLogin() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('register-view').classList.add('hidden');
+        }
+
+        function openRegister() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('register-view').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        }
+
+        function switchAuth(type) {
+            if (type === 'login') {
+                document.getElementById('login-view').classList.remove('hidden');
+                document.getElementById('register-view').classList.add('hidden');
+            } else {
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('register-view').classList.remove('hidden');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            currentUser = {
+                username: 'PlayerOne',
+                email: 'player@jet777.com',
+                balance: 1000000,
+                vip: 5
+            };
+            userBalance = currentUser.balance;
+            localStorage.setItem('jet777_user', JSON.stringify(currentUser));
+            updateUIForUser();
+            closeAuthModal();
+            showToast('Welcome back, PlayerOne!');
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            currentUser = {
+                username: 'NewPlayer',
+                email: 'new@jet777.com',
+                balance: 1000000,
+                vip: 1
+            };
+            userBalance = currentUser.balance;
+            localStorage.setItem('jet777_user', JSON.stringify(currentUser));
+            updateUIForUser();
+            closeAuthModal();
+            showToast('Welcome! 1,000,000 coins added!');
+        }
+
+        function updateUIForUser() {
+            if (!currentUser) return;
+            
+            document.getElementById('auth-buttons').classList.add('hidden');
+            document.getElementById('mobile-auth').classList.add('hidden');
+            document.getElementById('user-menu').classList.remove('hidden');
+            document.getElementById('user-menu').classList.add('flex');
+            document.getElementById('user-balance').classList.remove('hidden');
+            document.getElementById('balance-amount').textContent = userBalance.toLocaleString();
+            document.getElementById('user-name').textContent = currentUser.username;
+            document.getElementById('user-avatar').src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser.username}`;
+        }
+
+        function openProfile() {
+            if (!currentUser) {
+                openLogin();
+                return;
+            }
+            showToast(`VIP Level ${currentUser.vip} - ${currentUser.username}`);
+        }
+
+        // Navigation
+        function goHome() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast('Home');
+        }
+
+        function showSection(section) {
+            const el = document.getElementById(section);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        }
+
+        function openSearch() {
+            showToast('Search coming soon!');
+        }
+
+        // Offers
+        function claimOffer(type) {
+            const offers = {
+                welcome: 'Welcome bonus activated! Deposit now.',
+                daily: 'Daily cashback enabled!',
+                vip: 'VIP application submitted!'
+            };
+            showToast(offers[type]);
+        }
+
+        function playJackpot() {
+            showToast('Mega Jackpot game loading...');
+            setTimeout(() => openGame(1), 500);
+        }
+
+        function openVIPDetails() {
+            showToast('VIP program details');
+        }
+
+        function switchLeaderboardPeriod(period) {
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                if (btn.dataset.period === period) {
+                    btn.classList.add('bg-jet-gold', 'text-black');
+                    btn.classList.remove('bg-jet-card', 'text-gray-400');
+                } else {
+                    btn.classList.remove('bg-jet-gold', 'text-black');
+                    btn.classList.add('bg-jet-card', 'text-gray-400');
+                }
+            });
+            showToast(`Showing ${period}'s winners`);
+            renderLeaderboard();
+        }
+
+        function loadMoreGames() {
+            showToast('Loading more games...');
+            setTimeout(() => {
+                showToast('8 new games added!');
+            }, 1000);
+        }
+
+        function startPlaying() {
+            if (!currentUser) {
+                openRegister();
+            } else {
+                showSection('games');
+            }
+        }
+
+        // Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>
